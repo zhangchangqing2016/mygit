@@ -12,33 +12,27 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Hello world!
- *
  */
 @SpringBootApplication(scanBasePackages = {"com.zhangchangq.project"})
 @RestController
 @MapperScan("com.zhangchangq.project.dao")
-public class App 
-{
+public class App {
     @Autowired
     private UserDOMapper userDOMapper;
 
     @RequestMapping("/")
-    public String  home()
-    {
+    public String home() {
 
         UserDO userDo = userDOMapper.selectByPrimaryKey(1);
-        if(userDo ==null)
-        {
+        if (userDo == null) {
             return "用戶不存在";
-        }else
-        {
+        } else {
             return userDo.getName();
         }
     }
 
-    public static void main( String[] args )
-    {
-        System.out.println( "Hello World!" );
-        SpringApplication.run(App.class,args);
+    public static void main(String[] args) {
+        System.out.println("Hello World!");
+        SpringApplication.run(App.class, args);
     }
 }
