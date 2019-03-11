@@ -3,10 +3,11 @@ package com.zhangchangq.project.error;
 public enum EmBusinessError implements CommonError {
 
     //通用的错误类型00001
-    PARAMMETER_VALIDATION_ERROR(00001, "参数不合法"),
+    PARAMMETER_VALIDATION_ERROR(100001, "参数不合法"),
 
+    UNKONE_ERROR(10002,"未知错误"),
     //10000开通为用户错误信息定义
-    USER_NOT_EXIST(10001, "用户不存在");
+    USER_NOT_EXIST(20001, "用户不存在");
 
 
     private int errCode;
