@@ -10,6 +10,9 @@
 <head>
     <title></title>
     <meta charset="utf-8"/>
+    <link href="/static/assets/global/plugins/bootstrap/css/bootstrap.min.css"  rel="stylesheet" type="text/css">
+    <link href="/static/assets/global/css/components.css" rel="stylesheet"  type="text/css">
+    <link href="/static/assets/admin/pages/css/login.css"  rel="stylesheet" type="text/css">
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 
 
@@ -28,7 +31,7 @@
 
                     type:"POST",
                     contentType:"application/x-www-form-urlencoded",
-                    url:"http://localhost:8090/user/getotp",
+                    url:"/user/getotp",
                     data:{
                         "telphone":telphone
                     },
@@ -38,7 +41,7 @@
                         {
                             //alter("otp已经发送到你的手机上");
                         }else{
-                            //alter("otp 发送失败，原因为:"+data.data.errMsg);
+                           // alter("otp 发送失败，原因为:"+data.data.errMsg);
                         }
 
                     },
@@ -53,18 +56,25 @@
     </script>
 </head>
 
-<body>
-<div>
-    <h3>获取otp信息</h3>
-    <div>
-        <label>手机号</label>
+<body class="login">
+<div class="content">
+    <h3 class="form-title">登录</h3>
+    <div class="form-group">
+        <label class="control-label">手机号</label>
         <div>
-            <input type="text" name="telphone" id="telphone" placeholder="手机号"/>
+            <input type="text" class="form-control" name="telphone" id="telphone" placeholder="手机号"/>
+        </div>
+        <label class="control-label">验证码</label>
+        <div>
+            <input type="text" class="form-control" name="password" id="password" placeholder="验证码"/>
         </div>
     </div>
-    <div>
-        <button id="getotp" type="submit">
-            获取otp短信
+    <div class="form-actions">
+        <button id="login" class="btn blue" type="submit">
+            登录
+        </button>
+        <button id="register" class="btn yellow" type="submit">
+            注册
         </button>
     </div>
 </div>
