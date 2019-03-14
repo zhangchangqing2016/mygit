@@ -27,7 +27,7 @@ public class UserController extends BaseController {
     @RequestMapping("/")
     public String initPage()
     {
-        System.out.println("1111111");
+
        return "getotp";
     }
     //用户获取otp短信的接口
