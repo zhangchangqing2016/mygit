@@ -40,6 +40,7 @@
                         if(data.status=="success")
                         {
                             //alter("otp已经发送到你的手机上");
+                            window.location.href = "registeron";
                         }else{
                            // alter("otp 发送失败，原因为:"+data.data.errMsg);
                         }
@@ -58,24 +59,19 @@
 
 <body class="login">
 <div class="content">
-    <h3 class="form-title">登录</h3>
+    <h3 class="form-title">验证</h3>
     <div class="form-group">
         <label class="control-label">手机号</label>
         <div>
             <input type="text" class="form-control" name="telphone" id="telphone" placeholder="手机号"/>
         </div>
-        <label class="control-label">验证码</label>
-        <div>
-            <input type="text" class="form-control" name="password" id="password" placeholder="验证码"/>
-        </div>
+
     </div>
     <div class="form-actions">
-        <button id="login" class="btn blue" type="submit">
-            登录
+        <button id="getotp" class="btn blue" type="submit">
+            获取验证码
         </button>
-        <button id="register" class="btn yellow" type="submit">
-            注册
-        </button>
+
     </div>
 </div>
 </body>
