@@ -111,7 +111,7 @@
 
                         }else{
                             jqueryAlert({
-                                'icon'    : '/static/assets/plugins/alert/img/right.png',
+                                'icon'    : '/static/assets/plugins/alert/img/warning.png',
                                 'content' : "用户注册失败,失败原因"+data.data.errMsg,
                                 'closeTime' : 2000,
                             });
@@ -121,7 +121,7 @@
                     error:function(data)
                     {
                         jqueryAlert({
-                            'icon'    : '/static/assets/plugins/alert/img/right.png',
+                            'icon'    : '/static/assets/plugins/alert/img/error.png',
                             'content' : "用户注册失败,失败原因"+data.responseText,
                             'closeTime' : 2000,
                         });
