@@ -21,6 +21,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 
+/**
+ * 用户登录controller
+ */
 @Controller("user")
 @RequestMapping("/user")
 public class UserController extends BaseController {
@@ -30,9 +33,9 @@ public class UserController extends BaseController {
     @Autowired
     private HttpServletRequest request;
 
-    private  Logger logger = LoggerFactory.getLogger(this.getClass());
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @RequestMapping("/")
+    @RequestMapping("/getotpon")
     public String initPage() {
 
         logger.info("用户获取otpcode中----->>>>>>");
@@ -45,6 +48,30 @@ public class UserController extends BaseController {
 
         return "register";
     }
+
+    @RequestMapping("/login")
+    public String login() {
+
+        return "login";
+    }
+    //用户登录接口
+    @RequestMapping(value = "/login", method = {RequestMethod.POST}, consumes = {CONTENT_TYPE_FORMED})
+    @ResponseBody
+    public CommonReturnType login(@RequestParam(name = "telphone") String telphone,
+                                  @RequestParam(name = "password") String password) throws BusinessException, UnsupportedEncodingException, NoSuchAlgorithmException {
+        //入参校验
+        if (StringUtils.isEmpty(telphone) || StringUtils.isEmpty(password)) {
+            throw new BusinessException(EmBusinessError.PARAMMETER_VALIDATION_ERROR);
+        }
+
+        //用户登录服务,用来校验，用户登录是否合法
+        UserModel userModel = userService.validateLogin(telphone, encodeByMd5(password));
+        //将登录凭证加入到用户成功的session内
+        this.request.getSession().setAttribute("IS_LOGIN", true);
+        this.request.getSession().setAttribute("LOGIN_USER", userModel);
+        return CommonReturnType.create(null);
+    }
+
 
     //用户注册接口
     @RequestMapping(value = "/register", method = {RequestMethod.POST}, consumes = {CONTENT_TYPE_FORMED})
@@ -70,12 +97,13 @@ public class UserController extends BaseController {
         userModel.setRegisterMode("byphone");
         userModel.setEncrptPassword(encodeByMd5(password));
         userService.register(userModel);
-        logger.info("userName="+name+"注册账号成功!");
+        logger.info("userName=" + name + "注册账号成功!");
         return CommonReturnType.create(null);
     }
 
     /**
      * MD5 64位编码
+     *
      * @param str
      * @return
      * @throws NoSuchAlgorithmException
@@ -89,6 +117,7 @@ public class UserController extends BaseController {
         String newstr = base64.encode(md5.digest(str.getBytes("utf-8")));
         return newstr;
     }
+
     //用户获取otp短信的接口
     @RequestMapping(value = "/getotp", method = {RequestMethod.POST}, consumes = {CONTENT_TYPE_FORMED})
     @ResponseBody

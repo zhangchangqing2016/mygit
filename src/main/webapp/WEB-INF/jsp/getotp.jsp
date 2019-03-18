@@ -10,44 +10,41 @@
 <head>
     <title></title>
     <meta charset="utf-8"/>
-    <link href="/static/assets/global/plugins/bootstrap/css/bootstrap.min.css"  rel="stylesheet" type="text/css">
-    <link href="/static/assets/global/css/components.css" rel="stylesheet"  type="text/css">
-    <link href="/static/assets/admin/pages/css/login.css"  rel="stylesheet" type="text/css">
+    <link href="/static/assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="/static/assets/global/css/components.css" rel="stylesheet" type="text/css">
+    <link href="/static/assets/admin/pages/css/login.css" rel="stylesheet" type="text/css">
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 
 
     <script type="text/javascript">
 
-        jQuery(document).ready(function(){
+        jQuery(document).ready(function () {
             //绑定otp的click事件，用于获取手机验证码
-            $("#getotp").on("click",function(){
+            $("#getotp").on("click", function () {
 
                 var telphone = $("#telphone").val();
-                if (telphone == null && telphone =="") {
+                if (telphone == null && telphone == "") {
                     alter("手机号不能为空");
                     return false;
                 }
                 $.ajax({
 
-                    type:"POST",
-                    contentType:"application/x-www-form-urlencoded",
-                    url:"/user/getotp",
-                    data:{
-                        "telphone":telphone
+                    type: "POST",
+                    contentType: "application/x-www-form-urlencoded",
+                    url: "/user/getotp",
+                    data: {
+                        "telphone": telphone
                     },
-                    success:function(data)
-                    {
-                        if(data.status=="success")
-                        {
+                    success: function (data) {
+                        if (data.status == "success") {
                             //alter("otp已经发送到你的手机上");
                             window.location.href = "registeron";
-                        }else{
-                           // alter("otp 发送失败，原因为:"+data.data.errMsg);
+                        } else {
+                            // alter("otp 发送失败，原因为:"+data.data.errMsg);
                         }
 
                     },
-                    error:function(data)
-                    {
+                    error: function (data) {
                         //alter("otp 发送失败,原因为:"+data.responseText);
                     }
                 });
