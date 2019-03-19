@@ -8,6 +8,8 @@ import com.zhangchangq.project.error.BusinessException;
 import com.zhangchangq.project.error.EmBusinessError;
 import com.zhangchangq.project.service.UserService;
 import com.zhangchangq.project.service.model.UserModel;
+import com.zhangchangq.project.validator.ValidationResult;
+import com.zhangchangq.project.validator.ValidatorImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +30,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserPasswordDOMapper userPasswordDOMapper;
+    @Autowired
+    private ValidatorImpl validator;
 
     private Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
@@ -51,11 +55,9 @@ public class UserServiceImpl implements UserService {
             logger.error("userModel is null!");
             throw new BusinessException(EmBusinessError.PARAMMETER_VALIDATION_ERROR);
         }
-        if (StringUtils.isEmpty(userModel.getName()) || userModel.getGender() == null
-                || userModel.getAge() == null || StringUtils.isEmpty(userModel.getTelphone())) {
-
-            logger.error("name=" + userModel.getName() + "gender=" + userModel.getGender() + "age=" + userModel.getAge() + "telphone=" + userModel.getTelphone());
-            throw new BusinessException(EmBusinessError.PARAMMETER_VALIDATION_ERROR);
+        ValidationResult validationResult = validator.validate(userModel);
+        if (validationResult.isHasErrors()) {
+            throw new BusinessException(EmBusinessError.PARAMMETER_VALIDATION_ERROR, validationResult.getErrMsg());
         }
         //实现model到do的方法
         UserDO userDO = convertFromModel(userModel);
