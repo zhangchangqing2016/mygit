@@ -28,7 +28,7 @@ public class ItemModel {
     private Integer sales;
     //商品描述图片
     @NotBlank(message = "商品图片信息不能为空不能为空")
-    private String imageUrl;
+    private String imgUrl;
 
     public Integer getId() {
         return id;
@@ -78,12 +78,12 @@ public class ItemModel {
         this.sales = sales;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public String getImgUrl() {
+        return imgUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 
     @Override
@@ -95,7 +95,7 @@ public class ItemModel {
                 ", stock=" + stock +
                 ", description='" + description + '\'' +
                 ", sales=" + sales +
-                ", imageUrl='" + imageUrl + '\'' +
+                ", imgUrl='" + imgUrl + '\'' +
                 '}';
     }
 }

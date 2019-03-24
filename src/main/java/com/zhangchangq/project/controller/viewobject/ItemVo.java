@@ -17,7 +17,7 @@ public class ItemVo {
     //商品的销量
     private Integer sales;
     //商品描述图片
-    private String imageUrl;
+    private String imgUrl;
 
     public Integer getId() {
         return id;
@@ -67,11 +67,11 @@ public class ItemVo {
         this.sales = sales;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public String getImgUrl() {
+        return imgUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 }
