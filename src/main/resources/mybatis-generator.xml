@@ -41,7 +41,7 @@
         <table tableName="user_password" domainObjectName="UserPasswordDO" enableCountByExample="false"
                enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false">
-        </table>-->
+        </table>
 
         <table tableName="item" domainObjectName="ItemDO" enableCountByExample="false"
                enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
@@ -49,6 +49,11 @@
         </table>
 
         <table tableName="item_stock" domainObjectName="ItemStockDo" enableCountByExample="false"
+               enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
+               selectByExampleQueryId="false">
+        </table>-->
+
+        <table tableName="order_info" domainObjectName="OrderDo" enableCountByExample="false"
                enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false">
         </table>
