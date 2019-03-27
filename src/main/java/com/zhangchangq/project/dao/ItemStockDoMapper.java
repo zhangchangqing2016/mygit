@@ -1,6 +1,7 @@
 package com.zhangchangq.project.dao;
 
 import com.zhangchangq.project.dataobject.ItemStockDo;
+import org.apache.ibatis.annotations.Param;
 
 public interface ItemStockDoMapper {
     /**
@@ -52,4 +53,6 @@ public interface ItemStockDoMapper {
      * @mbg.generated Fri Mar 22 20:27:43 CST 2019
      */
     int updateByPrimaryKey(ItemStockDo record);
+
+    int descreaseStock(@Param("itemId") Integer itemId, @Param("amount")Integer amount);
 }
