@@ -27,6 +27,49 @@
         //声明成员变量
         var g_itemVo = {};
         jQuery(document).ready(function () {
+
+            $("#createorder").on("click",function () {
+
+                //获取商品详情
+                $.ajax({
+
+                    type: "POST",
+                    url: "/order/createorder",
+                    contentType:"application/x-www-form-urlencoded",
+                    data: {
+
+                        "itemId": g_itemVo.id,
+                        "amount":1
+                    },
+                    success: function (data) {
+                        if (data.status == "success") {
+                            jqueryAlert({
+                                'icon': '/static/assets/plugins/alert/img/right.png',
+                                'content': "下单成功" ,
+                                'closeTime': 2000,
+                            });
+
+                            window.location.reload();
+
+                        } else {
+                            jqueryAlert({
+                                'icon': '/static/assets/plugins/alert/img/warning.png',
+                                'content': "下单失败,失败原因" + data.data.errMsg,
+                                'closeTime': 2000,
+                            });
+                        }
+
+                    },
+                    error: function (data) {
+                        jqueryAlert({
+                            'icon': '/static/assets/plugins/alert/img/error.png',
+                            'content': "下单失败,失败原因" + data.responseText,
+                            'closeTime': 2000,
+                        });
+                    }
+                });
+            });
+
             //获取商品详情
             $.ajax({
 
@@ -58,7 +101,13 @@
                     });
                 }
             });
-        });
+
+            });
+
+
+
+
+
         
         function reloadDom() {
             $('#title').text(g_itemVo.title);
@@ -107,6 +156,12 @@
         <div>
             <label class="control-label" id="sales"/>
         </div>
+    </div>
+    <div class="form-actions">
+        <button id="createorder" class="btn blue" type="submit">
+            下单
+        </button>
+
     </div>
 </div>
 </body>

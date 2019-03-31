@@ -61,6 +61,7 @@
                                 'content': '登录成功!',
                                 'closeTime': 2000,
                             });
+                            window.location.href="/item/page"
                         } else {
                             jqueryAlert({
                                 'icon': '/static/assets/plugins/alert/img/warning.png',

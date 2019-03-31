@@ -15,12 +15,12 @@ import com.zhangchangq.project.service.model.UserModel;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -61,11 +61,13 @@ public class OrderServiceImpl implements OrderService {
         orderModel.setItemPrice(itemModel.getPrice());
         orderModel.setOrderPrice(itemModel.getPrice().multiply(new BigDecimal(amount)));
         //生成交易流水号,订单号
+        orderModel.setId(generateOrderNo());
         OrderDo orderDo = convertFromOrderModel(orderModel);
         mapper.insertSelective(orderDo);
+        //加上商品的销量
+        itemService.increaseSales(itemId, amount);
         //返回前端
-
-        return null;
+        return orderModel;
     }
 
     public static void main(String[] args) {
@@ -74,6 +76,8 @@ public class OrderServiceImpl implements OrderService {
         System.out.println(now.format(DateTimeFormatter.ISO_DATE).replace("-", ""));
     }
 
+    //生成业务流水号
+    @Transactional(propagation = Propagation.REQUIRED)
     private String generateOrderNo() {
         //订单号16位
         StringBuilder stringBuilder = new StringBuilder();
@@ -89,9 +93,14 @@ public class OrderServiceImpl implements OrderService {
         sequence = sequenceDo.getCurrentValue();
         sequenceDo.setCurrentValue(sequenceDo.getCurrentValue() + sequenceDo.getStep());
         sequenceDoMapper.updateByPrimaryKeySelective(sequenceDo);
+        String sequenceStr = String.valueOf(sequence);
+        for (int i = 0; i < 6 - sequenceStr.length(); i++) {
+            stringBuilder.append(0);
+        }
+        stringBuilder.append(sequenceStr);
         //最后两位为分库分表位
         stringBuilder.append("00");
-        return "";
+        return stringBuilder.toString();
 
     }
 
@@ -102,6 +111,8 @@ public class OrderServiceImpl implements OrderService {
         }
         OrderDo orderDo = new OrderDo();
         BeanUtils.copyProperties(orderModel, orderDo);
+        orderDo.setItemPrice(orderModel.getItemPrice().doubleValue());
+        orderDo.setOrderPrice(orderModel.getOrderPrice().doubleValue());
         return orderDo;
     }
 }

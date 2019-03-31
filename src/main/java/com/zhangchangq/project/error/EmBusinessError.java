@@ -8,7 +8,7 @@ public enum EmBusinessError implements CommonError {
     UNKONE_ERROR(10002,"未知错误"),
     //10000开通为用户错误信息定义
     USER_NOT_EXIST(20001, "用户不存在"),
-
+    USER_NOT_LOGIN(2003,"用户还未登录"),
     USER_LOGIN_FAIL(2002,"用户手机号或密码不正确"),
     //30000开头为交易信息错误
     STOCK_NOT_ENOUGH(30001,"库存不足")
