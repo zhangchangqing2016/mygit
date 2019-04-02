@@ -8,6 +8,7 @@ import com.zhangchangq.project.error.BusinessException;
 import com.zhangchangq.project.error.EmBusinessError;
 import com.zhangchangq.project.service.ItemService;
 import com.zhangchangq.project.service.model.ItemModel;
+import com.zhangchangq.project.service.model.PromoModel;
 import com.zhangchangq.project.validator.ValidationResult;
 import com.zhangchangq.project.validator.ValidatorImpl;
 import org.springframework.beans.BeanUtils;
@@ -28,6 +29,8 @@ public class ItemServiceImpl implements ItemService {
     private ItemDOMapper itemDOMapper;
     @Autowired
     private ItemStockDoMapper stockDoMapper;
+    @Autowired
+    private PromoService promoService;
 
     private ItemDO convertItemDOFromItemModel(ItemModel itemModel) throws BusinessException {
 
@@ -94,6 +97,11 @@ public class ItemServiceImpl implements ItemService {
         ItemStockDo itemStockDo = stockDoMapper.selectByItemId(itemDO.getId());
         //将dataobject转化为model
         ItemModel itemModel = convertModelFromDataObject(itemDO, itemStockDo);
+        //获取活动商品信息
+        PromoModel promoModel = promoService.getPromoByItemId(itemModel.getId());
+        if (promoModel != null && promoModel.getStatus().intValue() != 3) {
+            itemModel.setPromoModel(promoModel);
+        }
         return itemModel;
     }
 
@@ -111,7 +119,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     @Transactional
     public void increaseSales(Integer itemId, Integer amount) throws BusinessException {
-       itemDOMapper.increaseSales(itemId,amount);
+        itemDOMapper.increaseSales(itemId, amount);
     }
 
     private ItemModel convertModelFromDataObject(ItemDO itemDO, ItemStockDo itemStockDo) {

@@ -6,6 +6,8 @@ import java.math.BigDecimal;
 
 public class PromoModel {
     private Integer id;
+    //秒杀活动状态,为1表示还未开始,2表示进行中,3表示已结束
+    private Integer status;
     //秒杀活动名称
     private String promoName;
     //秒杀活动的开始时间
@@ -65,10 +67,19 @@ public class PromoModel {
         this.endDate = endDate;
     }
 
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "PromoModel{" +
                 "id=" + id +
+                ", status=" + status +
                 ", promoName='" + promoName + '\'' +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +

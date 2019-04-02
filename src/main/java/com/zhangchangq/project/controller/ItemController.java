@@ -41,6 +41,7 @@ public class ItemController extends BaseController {
         logger.info("创建商品中----->>>>>>");
         return "listItem";
     }
+
     //创建商品的controller
     @RequestMapping(value = "/create", method = {RequestMethod.POST}, consumes = {CONTENT_TYPE_FORMED})
     @ResponseBody
@@ -93,6 +94,15 @@ public class ItemController extends BaseController {
         }
         ItemVo itemVo = new ItemVo();
         BeanUtils.copyProperties(model, itemVo);
+        if (model.getPromoModel() != null) {
+            //有正在进行或即将进行的秒杀活动
+            itemVo.setPromoStatus(model.getPromoModel().getStatus());
+            itemVo.setPromoId(model.getPromoModel().getId());
+            itemVo.setStartDate(model.getPromoModel().getStartDate());
+            itemVo.setPromoPrice(model.getPromoModel().getPromoItemPrice());
+        } else {
+            itemVo.setPromoStatus(0);
+        }
         return itemVo;
     }
 }
