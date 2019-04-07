@@ -28,24 +28,25 @@
         var g_itemVo = {};
         jQuery(document).ready(function () {
 
-            $("#createorder").on("click",function () {
+            $("#createorder").on("click", function () {
 
                 //获取商品详情
                 $.ajax({
 
                     type: "POST",
                     url: "/order/createorder",
-                    contentType:"application/x-www-form-urlencoded",
+                    contentType: "application/x-www-form-urlencoded",
                     data: {
 
                         "itemId": g_itemVo.id,
-                        "amount":1
+                        "amount": 1,
+                        "promoId":g_itemVo.promoId
                     },
                     success: function (data) {
                         if (data.status == "success") {
                             jqueryAlert({
                                 'icon': '/static/assets/plugins/alert/img/right.png',
-                                'content': "下单成功" ,
+                                'content': "下单成功",
                                 'closeTime': 2000,
                             });
 
@@ -83,7 +84,7 @@
                     if (data.status == "success") {
                         g_itemVo = data.data;
                         reloadDom();
-
+                        setInterval(reloadDom,1000);
                     } else {
                         jqueryAlert({
                             'icon': '/static/assets/plugins/alert/img/warning.png',
@@ -102,20 +103,39 @@
                 }
             });
 
-            });
+        });
 
 
-
-
-
-        
         function reloadDom() {
             $('#title').text(g_itemVo.title);
             $('#description').text(g_itemVo.description);
             $('#stock').text(g_itemVo.stock);
             $('#price').text(g_itemVo.price);
-            $('#imgUrl').attr("src",g_itemVo.imgUrl);
+            $('#imgUrl').attr("src", g_itemVo.imgUrl);
             $('#sales').text(g_itemVo.sales);
+
+            if (g_itemVo.promoStatus == 1) {
+               //秒杀活动还未开始
+               var startTime =  g_itemVo.startDate.replace(new RegExp("-","gm"),"/");
+               startTime = (new Date(startTime)).getTime();
+               var nowTiem = Date.parse(new Date());
+               var delta = (startTime-nowTiem)/1000;
+
+               if (delta<=0){
+                  //活动开始了
+                   g_itemVo.promoStatus=2;
+                   reloadDom();
+               }
+               $("#promoStartDate").text("秒杀活动将于"+g_itemVo.startDate+"开始售卖 倒计时:"+delta+"秒");
+               $("#promoPrice").text(g_itemVo.promoPrice);
+               $("#createorder").attr("disabled",true);
+            }else if(g_itemVo.promoStatus == 2){
+               //秒杀活动正在进行中
+                $("#promoStartDate").text("秒杀正在进行中");
+                $("#promoPrice").text(g_itemVo.promoPrice);
+                $("#createorder").attr("disabled",false);
+                $("#normalPriceContainer").hide();
+            }
         }
     </script>
 </head>
@@ -123,6 +143,12 @@
 <body class="login">
 <div class="content">
     <h3 class="form-title">商品详情</h3>
+    <div id="promoStartDateContainer" class="form-group">
+        <label style="color:blue" id="promoStatus" class="control-label"></label>
+        <div>
+            <label style="color:red" class="control-label" id="promoStartDate"/>
+        </div>
+    </div>
     <div class="form-group">
         <div>
             <label class="control-label" id="title"/>
@@ -134,7 +160,13 @@
             <label class="control-label" id="description"/>
         </div>
     </div>
-    <div class="form-group">
+    <div id="promoPriceContainer" class="form-group">
+        <label style="color:red" class="control-label">秒杀价格</label>
+        <div>
+            <label style="color:red" class="control-label" id="promoPrice"/>
+        </div>
+    </div>
+    <div id="normalPriceContainer" class="form-group">
         <label class="control-label">价格</label>
         <div>
             <label class="control-label" id="price"/>

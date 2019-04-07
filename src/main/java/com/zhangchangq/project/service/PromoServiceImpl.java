@@ -19,22 +19,28 @@ public class PromoServiceImpl implements PromoService {
 
     @Override
     public PromoModel getPromoByItemId(Integer itemId) {
-        //获取对应商品的秒杀活动信息
-        PromoDo promoDo = promoDoMapper.selectByItemId(itemId);
+        PromoModel promoModel = null;
+        try {
+            //获取对应商品的秒杀活动信息
+            PromoDo promoDo = promoDoMapper.selectByItemId(itemId);
 
-        //dataobject->model
-        PromoModel promoModel = convertFromDataObject(promoDo);
-        if (promoModel == null) {
-            return null;
+            //dataobject->model
+            promoModel = convertFromDataObject(promoDo);
+            if (promoModel == null) {
+                return null;
+            }
+            //判断当前时间是否秒杀活动即将开始或正在进行
+            if (promoModel.getStartDate().isAfterNow()) {
+                promoModel.setStatus(1);
+            } else if (promoModel.getEndDate().isBeforeNow()) {
+                promoModel.setStatus(3);
+            } else {
+                promoModel.setStatus(2);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        //判断当前时间是否秒杀活动即将开始或正在进行
-        if (promoModel.getStartDate().isAfterNow()) {
-            promoModel.setStatus(1);
-        } else if (promoModel.getEndDate().isBeforeNow()) {
-            promoModel.setStatus(3);
-        } else {
-            promoModel.setStatus(2);
-        }
+
         return promoModel;
     }
 
@@ -46,7 +52,7 @@ public class PromoServiceImpl implements PromoService {
         BeanUtils.copyProperties(promoDo, model);
         model.setPromoItemPrice(new BigDecimal(promoDo.getPromoItemPrice()));
         model.setStartDate(new DateTime(promoDo.getStartDate()));
-        model.setEndDate(new DateTime(promoDo.getEndTime()));
+        model.setEndDate(new DateTime(promoDo.getEndDate()));
         return model;
     }
 }

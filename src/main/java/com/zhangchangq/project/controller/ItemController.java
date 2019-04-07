@@ -5,6 +5,7 @@ import com.zhangchangq.project.error.BusinessException;
 import com.zhangchangq.project.response.CommonReturnType;
 import com.zhangchangq.project.service.ItemService;
 import com.zhangchangq.project.service.model.ItemModel;
+import org.joda.time.format.DateTimeFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -98,7 +99,7 @@ public class ItemController extends BaseController {
             //有正在进行或即将进行的秒杀活动
             itemVo.setPromoStatus(model.getPromoModel().getStatus());
             itemVo.setPromoId(model.getPromoModel().getId());
-            itemVo.setStartDate(model.getPromoModel().getStartDate());
+            itemVo.setStartDate(model.getPromoModel().getStartDate().toString(DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")));
             itemVo.setPromoPrice(model.getPromoModel().getPromoItemPrice());
         } else {
             itemVo.setPromoStatus(0);
